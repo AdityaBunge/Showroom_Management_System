@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Customer: {{ customer.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>{{ customer.name }}</h1>
+
+  <table>
+    <tbody>
+      <tr><th>ID</th><td>{{ customer.id }}</td></tr>
+      <tr><th>Name</th><td>{{ customer.name }}</td></tr>
+      <tr><th>Email</th><td>{{ customer.email }}</td></tr>
+      <tr><th>Phone</th><td>{{ customer.phone }}</td></tr>
+      <!-- add more fields as needed -->
+    </tbody>
+  </table>
+
+  <div style="margin-top:16px;">
+    <a href="{% url 'customer-list' %}" class="btn">← Back to customers</a>
+    <a href="{% url 'customer-list' %}" class="btn">Edit</a> <!-- replace with proper edit URL if you add one -->
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Car List{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Car List</h1>
+
+    <div style="text-align: right; margin-bottom: 15px;">
+        <a href="{% url 'car-add' %}" class="btn">+ Add New Car</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in cars %}
+            <tr onclick="window.location.href='{% url 'car-detail' car.id %}'" style="cursor: pointer;">
+                <td>{{ car.id }}</td>
+                <td>{{ car.make }}</td>
+                <td>{{ car.model }}</td>
+                <td>{{ car.year }}</td>
+                <td>{{ car.price }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No cars available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,407 @@
+:root{
+  --accent: #2b8cff;
+  --muted: #6b7280;
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --radius: 12px;
+  --container: 1100px;
+  --shadow: 0 6px 20px rgba(22, 38, 57, 0.08);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:#111827;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+.container{
+  max-width:var(--container);
+  margin:0 auto;
+  padding:0 20px;
+}
+
+/* Header */
+.site-header{background:linear-gradient(90deg,#ffffff 0%, #f8fbff 100%); border-bottom:1px solid #e6eefc}
+.header-inner{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 0;
+}
+
+/* Brand */
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.brand-logo{height:44px;width:auto;border-radius:8px;object-fit:contain}
+.brand-text{font-weight:700;font-size:1.1rem}
+
+/* Nav */
+.main-nav ul{list-style:none;margin:0;padding:0;display:flex;gap:12px;align-items:center}
+.main-nav a{
+  display:inline-block;
+  padding:10px 14px;
+  border-radius:8px;
+  text-decoration:none;
+  color:var(--muted);
+  font-weight:600;
+}
+.main-nav a:hover{background:rgba(43,140,255,0.08); color:var(--accent)}
+.main-nav.open{display:block}
+
+/* Nav toggle visible on small screens */
+.nav-toggle{display:none;border:0;background:transparent;font-size:1.2rem;cursor:pointer}
+
+/* Hero */
+.hero{padding:28px 0 30px}
+.hero-inner{display:flex;flex-direction:column;gap:8px}
+.hero h1{margin:0;font-size:1.8rem}
+.lead{margin:0;color:var(--muted)}
+
+/* Main area */
+.site-main{padding:28px 0}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+  margin-bottom:18px;
+}
+
+/* Table / list helpers (use inside content) */
+.table{
+  width:100%;
+  border-collapse:collapse;
+}
+.table th, .table td{
+  padding:10px 12px;
+  border-bottom:1px solid #f1f5f9;
+  text-align:left;
+}
+.table th{color:var(--muted);font-weight:600}
+
+/* Footer */
+.site-footer{border-top:1px solid #eef6ff;background:#ffffff;padding:14px 0;margin-top:18px}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:0.95rem}
+
+/* Responsive */
+@media (max-width: 860px){
+  .main-nav{display:none;position:absolute;left:0;right:0;top:74px;background:var(--card);padding:12px;border-bottom:1px solid #e9f0ff}
+  .main-nav ul{flex-direction:column;gap:6px}
+  .nav-toggle{display:block}
+  .brand-text{display:none}
+  .hero h1{font-size:1.3rem}
+  .container{padding:0 14px}
+}
+
+/*cars*/
+/* ---------- GLOBAL STYLES ---------- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f6fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+}
+
+/* ---------- PAGE HEADERS ---------- */
+h1, h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+/* ---------- TABLE STYLES ---------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+thead {
+    background: #3498db;
+    color: white;
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+tbody tr:hover {
+    background: #ecf0f1;
+    cursor: pointer;
+}
+
+/* ---------- BUTTON STYLES ---------- */
+button, .btn {
+    display: inline-block;
+    padding: 10px 18px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover, .btn:hover {
+    background: #217dbb;
+}
+
+/* ---------- FORM STYLES ---------- */
+form table {
+    width: 100%;
+}
+
+form table td {
+    padding: 10px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52,152,219,0.4);
+}
+
+/* ---------- LINKS ---------- */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+/* --------------------------------------------- */
+/* DARK THEME VARIABLES */
+/* --------------------------------------------- */
+:root {
+  --accent: #38bdf8;       /* light blue */
+  --muted: #9ca3af;        /* soft gray */
+  --bg: #111827;           /* very dark navy */
+  --card: #1f2937;         /* dark gray-blue */
+  --radius: 12px;
+  --container: 1100px;
+  --shadow: 0 6px 20px rgba(0,0,0,0.6);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #e5e7eb; /* light gray text */
+  line-height: 1.5;
+}
+
+/* --------------------------------------------- */
+/* CONTAINER & CARD */
+/* --------------------------------------------- */
+.container {
+  max-width: var(--container);
+  margin: 40px auto;
+  padding: 25px;
+  background: var(--card);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+/* --------------------------------------------- */
+/* HEADER */
+/* --------------------------------------------- */
+.site-header {
+  background: #1f2937;
+  border-bottom: 1px solid #374151;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #f3f4f6;
+}
+.brand-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* --------------------------------------------- */
+/* NAVIGATION */
+/* --------------------------------------------- */
+.main-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 12px;
+}
+
+.main-nav a {
+  padding: 10px 14px;
+  text-decoration: none;
+  border-radius: 8px;
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+.main-nav a:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--accent);
+}
+
+/* --------------------------------------------- */
+/* HERO */
+/* --------------------------------------------- */
+.hero {
+  padding: 28px 0 30px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #f3f4f6;
+}
+
+.lead {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* --------------------------------------------- */
+/* TABLE */
+/* --------------------------------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+thead {
+  background: #374151;
+  color: #e5e7eb;
+}
+
+table th, table td {
+  padding: 12px;
+  border: 1px solid #4b5563;
+  text-align: center;
+}
+
+tbody tr:hover {
+  background: #374151;
+  cursor: pointer;
+}
+
+/* --------------------------------------------- */
+/* BUTTONS */
+/* --------------------------------------------- */
+button, .btn {
+  padding: 10px 18px;
+  background: var(--accent);
+  color: #111827;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+button:hover, .btn:hover {
+  background: #0ea5e9;
+}
+
+/* --------------------------------------------- */
+/* FORM INPUTS */
+/* --------------------------------------------- */
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  background: #1f2937;
+  color: #f3f4f6;
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 5px rgba(56,189,248,0.5);
+}
+
+/* --------------------------------------------- */
+/* FOOTER */
+/* --------------------------------------------- */
+.site-footer {
+  background: #1f2937;
+  color: #cbd5e1;
+  padding: 14px 0;
+  border-top: 1px solid #374151;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* --------------------------------------------- */
+/* RESPONSIVE */
+/* --------------------------------------------- */
+@media (max-width: 860px) {
+  .container { padding: 14px; }
+
+  .main-nav {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 74px;
+    background: var(--card);
+    padding: 12px;
+    border-bottom: 1px solid #374151;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+}

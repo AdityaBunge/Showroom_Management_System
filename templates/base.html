@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Showroom Management{% endblock %}</title>
+
+    <!-- Optional: Google font (works without it too) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="/">
+                <!-- Put logo at static/images/logo.png if you have one -->
+                <img src="{% static 'images/logo.png' %}" alt="Showroom logo" class="brand-logo" onerror="this.style.display='none'">
+                <span class="brand-text">Showroom</span>
+            </a>
+
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="/cars/">Cars</a></li>
+                    <li><a href="/customers/">Customers</a></li>
+                    <li><a href="/sales/">Sales</a></li>
+                    <li><a href="/inventory/">Inventory</a></li>
+                </ul>
+            </nav>
+
+            <button class="nav-toggle" aria-label="Toggle menu" onclick="toggleNav()">☰</button>
+        </div>
+
+        <div class="hero">
+            <div class="container hero-inner">
+                <h1>{% block hero_title %}Car Showroom Management{% endblock %}</h1>
+                <p class="lead">{% block hero_subtitle %}Manage inventory, customers, and sales — all in one place.{% endblock %}</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container site-main">
+        {% block content %}
+        <!-- default content -->
+        <section class="card">
+            <h2>Welcome</h2>
+            <p>Use the menu above to navigate to Cars, Customers, Sales, and Inventory.</p>
+        </section>
+        {% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="left">
+                <p>&copy; {% now "Y" %} Showroom Management System</p>
+            </div>
+            <div class="right">
+                <small>Built with ❤ · <a href="/admin/">Admin</a></small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Minimal JS for mobile nav -->
+    <script>
+        function toggleNav(){
+            const nav = document.getElementById('mainNav');
+            nav.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+# Python related
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Virtual environments
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+
+# Environment / secrets
+.env
+.env.*
+*.env
+
+# Django
+*.sqlite3
+db.sqlite3
+/media/
+media/
+staticfiles/
+
+# Logs and reports
+*.log
+*.pot
+*.py,cover
+coverage.xml
+htmlcov/
+.pytest_cache/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node
+node_modules/
+
+# Misc
+*.bak
+*.tmp
+*.orig
+
+# If you accidentally committed env/ or .env, remove them from the index with:
+# git rm -r --cached env
+# git rm --cached .env
+# then commit the removal so they are no longer tracked.
