@@ -1,41 +1,73 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Car List{% endblock %}
+{% block title %}Car Management{% endblock %}
+{% block page_title %}Car Management{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Car List</h1>
-
-    <div style="text-align: right; margin-bottom: 15px;">
-        <a href="{% url 'car-add' %}" class="btn">+ Add New Car</a>
+<div class="page-container">
+    <div class="page-header">
+        <div class="page-header-content">
+            <h2>Cars</h2>
+            <p class="page-subtitle">Manage your car inventory</p>
+        </div>
+        <a href="{% url 'car-add' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Car
+        </a>
     </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Make</th>
-                <th>Model</th>
-                <th>Year</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for car in cars %}
-            <tr onclick="window.location.href='{% url 'car-detail' car.id %}'" style="cursor: pointer;">
-                <td>{{ car.id }}</td>
-                <td>{{ car.make }}</td>
-                <td>{{ car.model }}</td>
-                <td>{{ car.year }}</td>
-                <td>{{ car.price }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">No cars available.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    
+    <div class="card">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Price</th>
+                        <th>Mileage</th>
+                        <th>Color</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for car in cars %}
+                    <tr>
+                        <td>{{ car.id }}</td>
+                        <td><strong>{{ car.make }}</strong></td>
+                        <td>{{ car.model }}</td>
+                        <td>{{ car.year }}</td>
+                        <td>${{ car.price|floatformat:2 }}</td>
+                        <td>{{ car.mileage|floatformat:0 }} mi</td>
+                        <td>{{ car.color|default:"—" }}</td>
+                        <td>
+                            <div style="display: flex; gap: 8px;">
+                                <a href="{% url 'car-detail' car.id %}" class="btn btn-sm btn-secondary" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'car-edit' car.id %}" class="btn btn-sm btn-secondary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'car-delete' car.id %}" class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            <div class="empty-message">
+                                <i class="fas fa-car"></i>
+                                <p>No cars found. Click "Add New Car" to get started.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -21,18 +21,18 @@ class SalesCreateView(CreateView):
     model = Sale
     form_class = SaleForm
     template_name = "sales/form.html"
-    success_url = reverse_lazy('sales:sales-list')
+    success_url = reverse_lazy('sales-list')
 
 class SalesUpdateView(UpdateView):
     model = Sale
     form_class = SaleForm
     template_name = "sales/form.html"
-    success_url = reverse_lazy('sales:sales-list')
+    success_url = reverse_lazy('sales-list')
 
 class SalesDeleteView(DeleteView):
     model = Sale
     template_name = "sales/confirm_delete.html"
-    success_url = reverse_lazy('sales:sales-list')
+    success_url = reverse_lazy('sales-list')
 
 # optional function-based fallback
 def sales_list(request):

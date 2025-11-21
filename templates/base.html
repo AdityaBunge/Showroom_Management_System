@@ -4,69 +4,148 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{% block title %}Showroom Management{% endblock %}</title>
-
-    <!-- Optional: Google font (works without it too) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>{% block title %}Showroom ERP{% endblock %}</title>
     
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.0">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <header class="site-header">
-        <div class="container header-inner">
-            <a class="brand" href="/">
-                <!-- Put logo at static/images/logo.png if you have one -->
-                <img src="{% static 'images/logo.png' %}" alt="Showroom logo" class="brand-logo" onerror="this.style.display='none'">
-                <span class="brand-text">Showroom</span>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-car-side"></i>
+                <span class="logo-text">Showroom ERP</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{% url 'index' %}" class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                        <i class="fas fa-home"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'car-list' %}" class="nav-link {% if 'car' in request.path %}active{% endif %}">
+                        <i class="fas fa-car"></i>
+                        <span class="nav-text">Cars</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'customers:customer-list' %}" class="nav-link {% if 'customer' in request.path %}active{% endif %}">
+                        <i class="fas fa-users"></i>
+                        <span class="nav-text">Customers</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'sales-list' %}" class="nav-link {% if 'sale' in request.path %}active{% endif %}">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="nav-text">Sales</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'inventory_list' %}" class="nav-link {% if 'inventory' in request.path %}active{% endif %}">
+                        <i class="fas fa-warehouse"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="/admin/" class="nav-link">
+                <i class="fas fa-cog"></i>
+                <span class="nav-text">Admin Panel</span>
             </a>
-
-            <nav class="main-nav" id="mainNav">
-                <ul>
-                    <li><a href="/cars/">Cars</a></li>
-                    <li><a href="/customers/">Customers</a></li>
-                    <li><a href="/sales/">Sales</a></li>
-                    <li><a href="/inventory/">Inventory</a></li>
-                </ul>
-            </nav>
-
-            <button class="nav-toggle" aria-label="Toggle menu" onclick="toggleNav()">☰</button>
         </div>
+    </aside>
 
-        <div class="hero">
-            <div class="container hero-inner">
-                <h1>{% block hero_title %}Car Showroom Management{% endblock %}</h1>
-                <p class="lead">{% block hero_subtitle %}Manage inventory, customers, and sales — all in one place.{% endblock %}</p>
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper" id="mainWrapper">
+        <!-- Top Navigation -->
+        <header class="top-nav">
+            <div class="top-nav-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title">
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
             </div>
-        </div>
-    </header>
-
-    <main class="container site-main">
-        {% block content %}
-        <!-- default content -->
-        <section class="card">
-            <h2>Welcome</h2>
-            <p>Use the menu above to navigate to Cars, Customers, Sales, and Inventory.</p>
-        </section>
-        {% endblock %}
-    </main>
-
-    <footer class="site-footer">
-        <div class="container footer-inner">
-            <div class="left">
-                <p>&copy; {% now "Y" %} Showroom Management System</p>
+            
+            <div class="top-nav-right">
+                <div class="user-menu">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="username">Admin</span>
+                    </div>
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                </div>
             </div>
-            <div class="right">
-                <small>Built with ❤ · <a href="/admin/">Admin</a></small>
-            </div>
-        </div>
-    </footer>
+        </header>
 
-    <!-- Minimal JS for mobile nav -->
+        <!-- Main Content -->
+        <main class="main-content">
+            {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                            {{ message }}
+                            <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            {% block content %}
+            <!-- Default content -->
+            {% endblock %}
+        </main>
+    </div>
+
+    <!-- Overlay for mobile -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
     <script>
-        function toggleNav(){
-            const nav = document.getElementById('mainNav');
-            nav.classList.toggle('open');
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainWrapper = document.getElementById('mainWrapper');
+            const overlay = document.getElementById('overlay');
+            
+            sidebar.classList.toggle('collapsed');
+            mainWrapper.classList.toggle('sidebar-collapsed');
+            overlay.classList.toggle('active');
         }
+
+        // Close sidebar on mobile when clicking outside
+        document.getElementById('overlay').addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                document.getElementById('overlay').classList.remove('active');
+            }
+        });
     </script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

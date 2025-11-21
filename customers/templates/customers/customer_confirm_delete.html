@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Delete Customer{% endblock %}
+
+{% block content %}
+<div class="container delete-container">
+    <div class="delete-card">
+        <div class="delete-header">
+            <h1>Confirm Delete</h1>
+        </div>
+        
+        <div class="delete-body">
+            <div class="warning-icon">⚠️</div>
+            <p>Are you sure you want to delete customer <strong>{{ customer.first_name }} {{ customer.last_name }}</strong>?</p>
+            <p class="warning-text">This action cannot be undone. All associated sales records will also be affected.</p>
+        </div>
+        
+        <form method="post" class="delete-form">
+            {% csrf_token %}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <a href="{% url 'customers:customer-list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.delete-container {
+    max-width: 500px;
+    margin: 60px auto;
+}
+
+.delete-card {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.delete-header {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 24px;
+    text-align: center;
+}
+
+.delete-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.delete-body {
+    padding: 30px;
+    text-align: center;
+}
+
+.warning-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.delete-body p {
+    font-size: 16px;
+    color: #374151;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.delete-body strong {
+    color: #111827;
+    font-weight: 600;
+}
+
+.warning-text {
+    color: #ef4444;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.delete-form {
+    padding: 0 30px 30px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.btn-secondary {
+    background: #6b7280;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background: #4b5563;
+}
+</style>
+{% endblock %}
+
