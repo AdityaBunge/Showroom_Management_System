@@ -1,41 +1,42 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.forms import modelform_factory
+# inventory/views.py
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from .models import Inventory
+from .forms import InventoryForm
+from django.db.models import F, Q
 
-InventoryForm = modelform_factory(Inventory, fields='__all__')
+class InventoryListView(ListView):
+    model = Inventory
+    template_name = "inventory/inventory_list.html"
+    context_object_name = "items"
+    paginate_by = 20
 
-def inventory_list(request):
-    items = Inventory.objects.all()
-    return render(request, 'inventory/list.html', {'items': items})
+    def get_queryset(self):
+        qs = super().get_queryset().select_related('car')
+        # optional filtering by ?q=search
+        q = self.request.GET.get('q')
+        if q:
+            qs = qs.filter(Q(car__make__icontains=q) | Q(car__model__icontains=q) | Q(location__icontains=q))
+        return qs
 
-def inventory_detail(request, item_id):
-    item = get_object_or_404(Inventory, pk=item_id)
-    return render(request, 'inventory/detail.html', {'item': item})
+class InventoryDetailView(DetailView):
+    model = Inventory
+    template_name = "inventory/inventory_detail.html"
+    context_object_name = "item"
 
-def add_inventory_item(request):
-    if request.method == 'POST':
-        form = InventoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('inventory_list')
-    else:
-        form = InventoryForm()
-    return render(request, 'inventory/form.html', {'form': form})
+class InventoryCreateView(CreateView):
+    model = Inventory
+    form_class = InventoryForm
+    template_name = "inventory/form.html"
+    success_url = reverse_lazy('inventory:inventory-list')
 
-def edit_inventory_item(request, item_id):
-    item = get_object_or_404(Inventory, pk=item_id)
-    if request.method == 'POST':
-        form = InventoryForm(request.POST, instance=item)
-        if form.is_valid():
-            form.save()
-            return redirect('inventory_list')
-    else:
-        form = InventoryForm(instance=item)
-    return render(request, 'inventory/form.html', {'form': form, 'item': item})
+class InventoryUpdateView(UpdateView):
+    model = Inventory
+    form_class = InventoryForm
+    template_name = "inventory/form.html"
+    success_url = reverse_lazy('inventory:inventory-list')
 
-def delete_inventory_item(request, item_id):
-    item = get_object_or_404(Inventory, pk=item_id)
-    if request.method == 'POST':
-        item.delete()
-        return redirect('inventory_list')
-    return render(request, 'inventory/confirm_delete.html', {'item': item})
+class InventoryDeleteView(DeleteView):
+    model = Inventory
+    template_name = "inventory/confirm_delete.html"
+    success_url = reverse_lazy('inventory:inventory-list')

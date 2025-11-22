@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Inventory Details{% endblock %}
+{% block page_title %}Inventory Details{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="card shadow-sm border-0" style="border-radius: 14px;">
+        <div class="card-body p-4">
+
+            <h3 class="fw-bold mb-4">Inventory Item Details</h3>
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Car:</div>
+                <div class="col-md-8 fw-semibold">{{ item.car }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Car Price:</div>
+                <div class="col-md-8">₹ {{ item.car.price|floatformat:2 }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Quantity Available:</div>
+                <div class="col-md-8 fw-semibold">{{ item.quantity }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Minimum Stock:</div>
+                <div class="col-md-8">{{ item.min_stock }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Warehouse / Location:</div>
+                <div class="col-md-8">{{ item.location|default:"Not specified" }}</div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4 text-muted">Last Updated:</div>
+                <div class="col-md-8">{{ item.updated_at|date:"M d, Y H:i" }}</div>
+            </div>
+
+            <hr>
+
+            <!-- Actions -->
+            <div class="d-flex gap-3">
+                <a href="{% url 'inventory:inventory-update' item.pk %}" class="btn btn-warning px-4">Edit</a>
+                <a href="{% url 'inventory:inventory-delete' item.pk %}" class="btn btn-danger px-4">Delete</a>
+                <a href="{% url 'inventory:inventory-list' %}" class="btn btn-secondary px-4">Back</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,10 +1,13 @@
+# inventory/urls.py
 from django.urls import path
 from . import views
 
+app_name = "inventory"
+
 urlpatterns = [
-    path('', views.inventory_list, name='inventory_list'),
-    path('add/', views.add_inventory_item, name='add_inventory_item'),
-    path('<int:item_id>/', views.inventory_detail, name='inventory_detail'),
-    path('<int:item_id>/edit/', views.edit_inventory_item, name='edit_inventory_item'),
-    path('<int:item_id>/delete/', views.delete_inventory_item, name='delete_inventory_item'),
+    path('', views.InventoryListView.as_view(), name='inventory-list'),
+    path('create/', views.InventoryCreateView.as_view(), name='inventory-create'),
+    path('<int:pk>/', views.InventoryDetailView.as_view(), name='inventory-detail'),
+    path('<int:pk>/update/', views.InventoryUpdateView.as_view(), name='inventory-update'),
+    path('<int:pk>/delete/', views.InventoryDeleteView.as_view(), name='inventory-delete'),
 ]

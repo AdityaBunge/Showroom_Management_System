@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Inventory Management{% endblock %}
+{% block page_title %}Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <h2>Inventory</h2>
+            <p class="page-subtitle">Track stock levels for cars</p>
+        </div>
+
+        <a href="{% url 'inventory:inventory-create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Inventory
+        </a>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="card">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Car</th>
+                        <th>Quantity</th>
+                        <th>Min Stock</th>
+                        <th>Location</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>
+                            <strong>{{ item.car }}</strong><br>
+                            <small class="text-muted">₹ {{ item.car.price|floatformat:2 }}</small>
+                        </td>
+                        <td>
+                            {{ item.quantity }}
+                            {% if item.quantity <= item.min_stock %}
+                                <span class="low-badge">Low</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ item.min_stock }}</td>
+                        <td>{{ item.location|default:"—" }}</td>
+                        <td>{{ item.updated_at|date:"M d, Y" }}</td>
+
+                        <td>
+                            <div style="display:flex; gap:8px;">
+                                <a href="{% url 'inventory:inventory-detail' item.id %}" 
+                                   class="btn btn-sm btn-secondary" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                <a href="{% url 'inventory:inventory-update' item.id %}" 
+                                   class="btn btn-sm btn-secondary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                <a href="{% url 'inventory:inventory-delete' item.id %}" 
+                                   class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <div class="empty-message">
+                                <i class="fas fa-warehouse"></i>
+                                <p>No inventory records found. Click “Add Inventory” to start.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.low-badge {
+    background: #ffebe6;
+    color: #d23200;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 11px;
+    margin-left: 6px;
+}
+</style>
+
+{% endblock %}

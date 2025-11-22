@@ -1,20 +1,22 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Showroom ERP{% endblock %}</title>
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.0">
     {% block extra_css %}{% endblock %}
 </head>
+
 <body>
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
@@ -27,11 +29,12 @@
                 <i class="fas fa-bars"></i>
             </button>
         </div>
-        
+
         <nav class="sidebar-nav">
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="{% url 'index' %}" class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                    <a href="{% url 'index' %}"
+                        class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
                         <i class="fas fa-home"></i>
                         <span class="nav-text">Dashboard</span>
                     </a>
@@ -43,26 +46,29 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'customers:customer-list' %}" class="nav-link {% if 'customer' in request.path %}active{% endif %}">
+                    <a href="{% url 'customers:customer-list' %}"
+                        class="nav-link {% if request.resolver_match.namespace == 'customers' or request.resolver_match.url_name == 'customer-list' %}active{% endif %}">
                         <i class="fas fa-users"></i>
                         <span class="nav-text">Customers</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'sales:sale-list' %}" class="nav-link {% if 'sale' in request.path %}active{% endif %}">
+                    <a href="{% url 'sales:sale-list' %}"
+                        class="nav-link {% if 'sale' in request.path %}active{% endif %}">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="nav-text">Sales</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'inventory_list' %}" class="nav-link {% if 'inventory' in request.path %}active{% endif %}">
+                    <a href="{% url 'inventory:inventory-list' %}"
+                        class="nav-link {% if request.resolver_match.namespace == 'inventory' or request.resolver_match.url_name == 'inventory-list' %}active{% endif %}">
                         <i class="fas fa-warehouse"></i>
                         <span class="nav-text">Inventory</span>
                     </a>
                 </li>
             </ul>
         </nav>
-        
+
         <div class="sidebar-footer">
             <a href="/admin/" class="nav-link">
                 <i class="fas fa-cog"></i>
@@ -83,7 +89,7 @@
                     <h1>{% block page_title %}Dashboard{% endblock %}</h1>
                 </div>
             </div>
-            
+
             <div class="top-nav-right">
                 <div class="user-menu">
                     <div class="user-info">
@@ -101,17 +107,18 @@
         <!-- Main Content -->
         <main class="main-content">
             {% if messages %}
-                <div class="messages-container">
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">
-                            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
-                            {{ message }}
-                            <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
-                        </div>
-                    {% endfor %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i
+                        class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                    <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
                 </div>
+                {% endfor %}
+            </div>
             {% endif %}
-            
+
             {% block content %}
             <!-- Default content -->
             {% endblock %}
@@ -126,21 +133,21 @@
             const sidebar = document.getElementById('sidebar');
             const mainWrapper = document.getElementById('mainWrapper');
             const overlay = document.getElementById('overlay');
-            
+
             sidebar.classList.toggle('collapsed');
             mainWrapper.classList.toggle('sidebar-collapsed');
             overlay.classList.toggle('active');
         }
 
         // Close sidebar on mobile when clicking outside
-        document.getElementById('overlay').addEventListener('click', function() {
+        document.getElementById('overlay').addEventListener('click', function () {
             if (window.innerWidth <= 768) {
                 toggleSidebar();
             }
         });
 
         // Handle window resize
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
             if (window.innerWidth > 768) {
                 document.getElementById('overlay').classList.remove('active');
             }
@@ -148,4 +155,5 @@
     </script>
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>
