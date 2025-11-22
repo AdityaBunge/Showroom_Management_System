@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sales Management</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    {% block content %}
+    <div class="page-container">
+        <div class="page-header">
+            <div class="page-header-content">
+                <h2>Sales</h2>
+                <p class="page-subtitle">Manage your sales records</p>
+            </div>
+            <a href="{% url 'sales:sale-create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Sale
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Customer</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sale in sales %}
+                        <tr data-sale-id="{{ sale.id }}" data-date="{{ sale.sale_date }}" data-amount="{{ sale.sale_price }}"
+                            data-customer="{{ sale.customer }}">
+                            <td>{{ sale.id }}</td>
+                            <td>{{ sale.sale_date }}</td>
+                            <td>{{ sale.sale_price }}</td>
+                            <td>{{ sale.customer }}</td>
+                            <td>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-sm btn-secondary" onclick="editSale({{ sale.id }}, event)"
+                                        title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="deleteSale({{ sale.id }}, '{{ sale.customer }}')" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <div class="empty-message">
+                                    <i class="fas fa-receipt"></i>
+                                    <p>No sales found. Click "Add New Sale" to get started.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sale Modal -->
+    <div id="saleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="saleModalTitle">Add New Sale</h2>
+                <span class="close" onclick="closeSaleModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="saleForm" method="post" action="">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_date">Date <span class="required">*</span></label>
+                        <input type="date" name="date" id="id_date" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_amount">Amount <span class="required">*</span></label>
+                        <input type="number" name="amount" id="id_amount" required class="form-control" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_customer">Customer <span class="required">*</span></label>
+                        <input type="text" name="customer" id="id_customer" required class="form-control">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Sale</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeSaleModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteSaleModal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Confirm Delete</h2>
+                <span class="close" onclick="closeDeleteSaleModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete sale for <strong id="deleteSaleCustomer"></strong>?</p>
+                <p class="warning-text">This action cannot be undone.</p>
+                <form id="deleteSaleForm" method="post" action="">
+                    {% csrf_token %}
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeDeleteSaleModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .page-container {
+            width: 100%;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-header-content h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 4px 0;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .modal-header {
+            background: var(--primary) !important;
+            color: white !important;
+        }
+
+        .modal-header h2 {
+            color: white !important;
+        }
+
+        .close {
+            color: white !important;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+    </style>
+
+    <script>
+        // Sale Modal Functions
+        function openSaleModal(saleId = null) {
+            const modal = document.getElementById('saleModal');
+            const form = document.getElementById('saleForm');
+            const title = document.getElementById('saleModalTitle');
+
+            if (saleId) {
+                // Edit mode - will be handled by editSale
+                title.textContent = 'Edit Sale';
+                form.action = `/sales/${saleId}/update/`;
+            } else {
+                // Add mode
+                title.textContent = 'Add New Sale';
+                form.action = '{% url "sales:sale-create" %}';
+                form.reset();
+            }
+
+            modal.classList.add('show');
+        }
+
+        function closeSaleModal() {
+            const modal = document.getElementById('saleModal');
+            modal.classList.remove('show');
+            document.getElementById('saleForm').reset();
+        }
+
+        function editSale(saleId, event) {
+            // Get sale data from the table row's data attributes
+            const row = event.target.closest('tr');
+            if (row && row.dataset.saleId) {
+                // Extract data from data attributes
+                const date = row.dataset.date || '';
+                const amount = row.dataset.amount || '';
+                const customer = row.dataset.customer || '';
+
+                // Populate form
+                document.getElementById('id_date').value = date;
+                document.getElementById('id_amount').value = amount;
+                document.getElementById('id_customer').value = customer;
+
+                // Set form action and title
+                document.getElementById('saleForm').action = `/sales/${saleId}/update/`;
+                document.getElementById('saleModalTitle').textContent = 'Edit Sale';
+                document.getElementById('saleModal').classList.add('show');
+            } else {
+                // Fallback: redirect to edit page
+                window.location.href = `/sales/${saleId}/update/`;
+            }
+        }
+
+        function deleteSale(saleId, customerName) {
+            const modal = document.getElementById('deleteSaleModal');
+            const form = document.getElementById('deleteSaleForm');
+            const nameSpan = document.getElementById('deleteSaleCustomer');
+
+            nameSpan.textContent = customerName;
+            form.action = `/sales/${saleId}/delete/`;
+            modal.classList.add('show');
+        }
+
+        function closeDeleteSaleModal() {
+            const modal = document.getElementById('deleteSaleModal');
+            modal.classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            const saleModal = document.getElementById('saleModal');
+            const deleteSaleModal = document.getElementById('deleteSaleModal');
+
+            if (event.target == saleModal) {
+                closeSaleModal();
+            }
+            if (event.target == deleteSaleModal) {
+                closeDeleteSaleModal();
+            }
+        }
+
+        // Handle form submission and populate form on page load if editing
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('saleForm');
+            if (form) {
+                // Check if we're in edit mode by checking the URL
+                const path = window.location.pathname;
+                if (path.includes('/update/')) {
+                    // Extract sale ID and set form action
+                    const match = path.match(/\/sales\/(\d+)\/update\//);
+                    if (match) {
+                        form.action = path;
+                        document.getElementById('saleModalTitle').textContent = 'Edit Sale';
+                        document.getElementById('saleModal').classList.add('show');
+                    }
+                }
+            }
+
+            // Populate form fields if we have sale data in the page context
+            // This will be populated when the edit page loads
+            {% if form %}
+            {% if form.instance.pk %}
+            // We're editing, populate the modal
+            document.getElementById('id_date').value = '{{ form.instance.date|escapejs }}';
+            document.getElementById('id_amount').value = '{{ form.instance.amount|escapejs }}';
+            document.getElementById('id_customer').value = '{{ form.instance.customer|escapejs }}';
+            document.getElementById('saleForm').action = '/sales/{{ form.instance.pk }}/update/';
+            document.getElementById('saleModalTitle').textContent = 'Edit Sale';
+            document.getElementById('saleModal').classList.add('show');
+            {% endif %}
+            {% endif %}
+        });
+    </script>
+    {% endblock %}
+</body>
+
+</html>

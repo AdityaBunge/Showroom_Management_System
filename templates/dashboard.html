@@ -137,7 +137,7 @@
                 <p class="stat-label">Total Sales</p>
             </div>
             <div class="stat-footer">
-                <a href="{% url 'sales-list' %}" class="stat-link">View All <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'sales:sale-list' %}" class="stat-link">View All <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
 
@@ -150,7 +150,7 @@
                 <p class="stat-label">Total Revenue</p>
             </div>
             <div class="stat-footer">
-                <a href="{% url 'sales-list' %}" class="stat-link">View Sales <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'sales:sale-list' %}" class="stat-link">View Sales <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>
@@ -161,7 +161,7 @@
         <div class="dashboard-card">
             <div class="card-header">
                 <h2><i class="fas fa-shopping-cart"></i> Recent Sales</h2>
-                <a href="{% url 'sales-list' %}" class="view-all-link">View All</a>
+                <a href="{% url 'sales:sale-list' %}" class="view-all-link">View All</a>
             </div>
             <div class="card-body">
                 {% if recent_sales %}
